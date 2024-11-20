@@ -1,6 +1,14 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { useScroll } from '@vueuse/core'
+// 导入 store
+import { useCategoryStore } from '@/stores/category.js'
 const { y } = useScroll(window)
+// store 实例化
+const categoryStore = useCategoryStore()
+// 解构 store
+// store 是一个用 reactive 包装的对象
+const { categoryStoreList } = storeToRefs(categoryStore)
 </script>
 
 <template>
@@ -9,35 +17,8 @@ const { y } = useScroll(window)
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
-        <li class="home">
-          <RouterLink to="/">首页</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">居家</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">美食</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">服饰</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">母婴</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">个护</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">严选</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">数码</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">运动</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">杂项</RouterLink>
+        <li class="home"  v-for="item in categoryStoreList" :key="item.id">
+          <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
 
