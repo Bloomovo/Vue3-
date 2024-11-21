@@ -7,9 +7,9 @@ import HomeProduct from '@/components/HomeProduct.vue'
 </script>
 
 <template>
-  <div class="contianer">
+  <div class="container">
     <HomeCateGory/>
-    <HomeCateGory/>  
+    <HomeBanner/>  
   </div>
     <HomeNew/>
     <HomeHot/>
