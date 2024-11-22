@@ -1,6 +1,5 @@
 <script setup>
 import { useBannerStore } from '@/stores/banner'
-import SubList from './SubList.vue'
 const store = useBannerStore()
 </script>
 

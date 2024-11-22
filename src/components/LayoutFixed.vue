@@ -3,15 +3,12 @@ import { storeToRefs } from 'pinia'
 import { useScroll } from '@vueuse/core'
 // 导入 store
 import { useCategoryStore } from '@/stores/homeCategory.js'
-import { useTopCategroy } from '@/stores/categroy';
 const { y } = useScroll(window)
 // store 实例化
 const categoryStore = useCategoryStore()
 // 解构 store
 // store 是一个用 reactive 包装的对象
 const { categoryStoreList } = storeToRefs(categoryStore)
-// 点击分类调用更改面包屑
-const TopCategoryStore = useTopCategroy()
 </script>
 
 <template>
@@ -21,7 +18,7 @@ const TopCategoryStore = useTopCategroy()
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
         <li class="home"  v-for="item in categoryStoreList" :key="item.id">
-          <RouterLink active-class="active" :to="`/category/${item.id}`" @click="TopCategoryStore.getTopCategroy(item.id)">{{ item.name }}</RouterLink>
+          <RouterLink active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </li>
       </ul>
 

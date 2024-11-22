@@ -1,6 +1,11 @@
 <script setup>
 import { useTopCategroy } from '@/stores/categroy'
+// 路由缓存更新
+import { onBeforeRouteUpdate } from 'vue-router'
 const store = useTopCategroy()
+onBeforeRouteUpdate((to) => {
+  store.getTopCategroy(to.params.id)
+})
 </script>
 
 <template>
