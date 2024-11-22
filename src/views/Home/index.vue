@@ -9,13 +9,16 @@ import { onMounted } from 'vue'
 import { useBannerStore } from '@/stores/banner.js'
 import { useNewGoodsStore } from '@/stores/newGoods'
 import { useHomeHotStore } from '@/stores/homeHot'
+import { useProductStore } from '@/stores/homeProduct'
 const bannerStore = useBannerStore()
 const newGoodsStore = useNewGoodsStore()
 const homeHotStore = useHomeHotStore()
+const goodsProduct = useProductStore()
 onMounted(() => {
   bannerStore.getBanner()
   newGoodsStore.getNewGoods()
   homeHotStore.getHot()
+  goodsProduct.getGoods()
 })
 </script>
 
