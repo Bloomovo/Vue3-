@@ -7,9 +7,12 @@ import HomeProduct from '@/components/HomeProduct.vue'
 import HomePanel from '@/components/HomePanel.vue'
 import { onMounted } from 'vue'
 import { useBannerStore } from '@/stores/banner.js'
+import { useNewGoodsStore } from '@/stores/newGoods'
 const bannerStore = useBannerStore()
+const newGoodsStore = useNewGoodsStore()
 onMounted(() => {
   bannerStore.getBanner()
+  newGoodsStore.getNewGoods()
 })
 </script>
 

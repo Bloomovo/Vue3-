@@ -8,7 +8,6 @@ import LayoutFixed from '@/components/LayoutFixed.vue'
   <LayoutFixed/>
   <LayoutNav />
   <LayoutHeader />
-  我是首页
   <RouterView />
   <LayoutFooter />
 </template>
