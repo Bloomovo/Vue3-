@@ -30,12 +30,4 @@ onMounted(() => {
     <HomeNew/>
     <HomeHot/>
     <HomeProduct />
-    <HomePanel
-    title="新鲜好物"
-    sub-title="新鲜商品 好多商品"
-    ></HomePanel>
-    <HomePanel
-    title="人气推荐"
-    sub-title="人气推荐 好多商品"
-    ></HomePanel>
 </template>

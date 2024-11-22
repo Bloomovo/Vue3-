@@ -1,6 +1,7 @@
 <script setup>
 import HomePanel from './HomePanel.vue'
 import { useProductStore } from '@/stores/homeProduct'
+import GoosItem from './GoosItem.vue'
 const store = useProductStore()
 </script>
 
@@ -17,12 +18,7 @@ const store = useProductStore()
         </RouterLink>
         <ul class="goods-list">
           <li v-for="good in cate.goods" :key="good.id">
-            <RouterLink to="/" class="goods-item">
-              <img v-img-lazy="good.picture" alt="" />
-              <p class="name ellipsis">{{ good.name }}</p>
-              <p class="desc ellipsis">{{ good.desc }}</p>
-              <p class="price">&yen;{{ good.price }}</p>
-            </RouterLink>
+            <GoosItem :goods="good"></GoosItem>
           </li>
         </ul>
       </div>
