@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { useScroll } from '@vueuse/core'
 // 导入 store
-import { useCategoryStore } from '@/stores/category.js'
+import { useCategoryStore } from '@/stores/homeCategory.js'
 const { y } = useScroll(window)
 // store 实例化
 const categoryStore = useCategoryStore()

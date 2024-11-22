@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useCategoryStore } from '@/stores/category.js'
+import { useCategoryStore } from '@/stores/homeCategory.js'
 const store = useCategoryStore()
 </script>
 

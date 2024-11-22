@@ -1,5 +1,5 @@
 <script setup>
-import { useCategoryStore } from '@/stores/category.js'
+import { useCategoryStore } from '@/stores/homeCategory.js'
 import { onMounted } from 'vue'
 const categoryStore = useCategoryStore()
 onMounted(() => {
