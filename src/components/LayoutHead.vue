@@ -1,9 +1,9 @@
 <script setup>
-import { getCategoryAPI } from '@/api/layout.js'
-import { ref, onMounted} from 'vue'
 import { useCategoryStore } from '@/stores/homeCategory.js'
-
+import { useTopCategroy } from '@/stores/categroy';
 const categoryStore = useCategoryStore()
+// 点击分类调用更改面包屑
+const TopCategoryStore = useTopCategroy()
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const categoryStore = useCategoryStore()
       </h1>
       <ul class="app-header-nav">
         <li class="home"  v-for="item in categoryStore.categoryStoreList" :key="item.id">
-          <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+          <RouterLink active-class="active" :to="`/category/${item.id}`" @click="TopCategoryStore.getTopCategroy(item.id)">{{ item.name }}</RouterLink>
         </li>
       </ul>
       <div class="search">
