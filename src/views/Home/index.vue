@@ -8,11 +8,14 @@ import HomePanel from '@/components/HomePanel.vue'
 import { onMounted } from 'vue'
 import { useBannerStore } from '@/stores/banner.js'
 import { useNewGoodsStore } from '@/stores/newGoods'
+import { useHomeHotStore } from '@/stores/homeHot'
 const bannerStore = useBannerStore()
 const newGoodsStore = useNewGoodsStore()
+const homeHotStore = useHomeHotStore()
 onMounted(() => {
   bannerStore.getBanner()
   newGoodsStore.getNewGoods()
+  homeHotStore.getHot()
 })
 </script>
 

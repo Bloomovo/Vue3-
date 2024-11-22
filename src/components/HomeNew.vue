@@ -1,21 +1,22 @@
 <script setup>
+import HomePanel from './HomePanel.vue'
 import { useNewGoodsStore } from '@/stores/newGoods'
 const store = useNewGoodsStore()
 </script>
 
 <template>
-  <div></div>
-  <!-- 下面是插槽主体内容模版 -->
-  <ul class="goods-list">
-    <li v-for="item in store.newList" :key="item.id">
-      <RouterLink to="/">
-        <img :src="item.picture" alt="" />
-        <p class="name">{{ item.name }}</p>
-        <p class="price">&yen;{{ item.price }}</p>
-      </RouterLink>
-    </li>
-  </ul>
- 
+  
+  <HomePanel title="新鲜好物" sub-title="人气爆款 不容错过">
+    <ul class="goods-list">
+      <li v-for="item in store.newList" :key="item.id">
+        <RouterLink to="/">
+          <img :src="item.picture" alt="" />
+          <p class="name">{{ item.name }}</p>
+          <p class="price">&yen;{{ item.price }}</p>
+        </RouterLink>
+      </li>
+    </ul>
+  </HomePanel>
 </template>
 
 
