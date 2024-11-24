@@ -4,12 +4,17 @@ import { useRoute } from 'vue-router'
 import { useDetailStore } from '@/stores/detail'
 import DetailHot from './components/DetailHot.vue';
 import ImgView from '@/components/ImgView.vue';
+import XtxSku from '@/components/XtxSku.vue';
 const store = useDetailStore()
 const route = useRoute()
 onMounted(() => {
   // 调用详情页api
   store.getDetail(route.params.id)
 })
+// skuChange
+const skuChange = (sku) => {
+  console.log(sku)
+}
 </script>
 
 <template>
@@ -87,7 +92,7 @@ onMounted(() => {
                 </dl>
               </div>
               <!-- sku组件 -->
-
+              <XtxSku :goods="store.detailList" @change="skuChange"></XtxSku>
               <!-- 数据组件 -->
 
               <!-- 按钮组件 -->
