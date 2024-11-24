@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router'
 import { useDetailStore } from '@/stores/detail'
+import DetailHot from './components/DetailHot.vue';
 const store = useDetailStore()
 const route = useRoute()
 onMounted(() => {
@@ -119,7 +120,8 @@ onMounted(() => {
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-
+              <DetailHot :hotType="1"></DetailHot>
+              <DetailHot :hotType="2"></DetailHot>
             </div>
           </div>
         </div>
