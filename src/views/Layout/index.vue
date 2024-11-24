@@ -1,8 +1,8 @@
 <script setup>
-import LayoutNav from '@/components/LayoutNav.vue'
-import LayoutHeader from '@/components/LayoutHead.vue'
-import LayoutFooter from '@/components/LayoutFooter.vue'
-import LayoutFixed from '@/components/LayoutFixed.vue'
+import LayoutNav from '@/views/Layout/components/LayoutNav.vue'
+import LayoutHeader from '@/views/Layout/components/LayoutHead.vue'
+import LayoutFooter from '@/views/Layout/components/LayoutFooter.vue'
+import LayoutFixed from '@/views/Layout/components/LayoutFixed.vue'
 </script>
 <template>
   <LayoutFixed/>

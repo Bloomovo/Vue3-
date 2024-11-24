@@ -1,7 +1,7 @@
 <script setup>
-import HomePanel from './HomePanel.vue'
+import HomePanel from '@/views/Home/components/HomePanel.vue'
 import { useProductStore } from '@/stores/homeProduct'
-import GoosItem from './GoosItem.vue'
+import GoosItem from '@/components/GoosItem.vue'
 const store = useProductStore()
 </script>
 
