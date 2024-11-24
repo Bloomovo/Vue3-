@@ -1,13 +1,13 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getCategoryFilter } from '@/stores/categroy'
 import { useTopCategroy } from '@/stores/categroy'
 const route = useRoute()
-onMounted(() => {
-  getCategoryFilter(route.params.id)
-})
 const store = useTopCategroy()
+onMounted(() => {
+  store.getCategoryFilter(route.params.id)
+})
+
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const store = useTopCategroy()
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: `/category/${filterData.parentId}` }">{{store.filterData.parentName}}
+        <el-breadcrumb-item :to="{ path: `/category/${store.filterData.parentId}` }">{{store.filterData.parentName}}
         </el-breadcrumb-item>
         <el-breadcrumb-item>{{store.filterData.name}}</el-breadcrumb-item>
       </el-breadcrumb>
