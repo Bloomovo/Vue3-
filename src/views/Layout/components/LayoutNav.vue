@@ -1,17 +1,22 @@
 <script setup>
-
+// 登录时用户信息
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router';
+const store = useUserStore()
+const router = useRouter()
 </script>
 
 <template>
   <nav class="app-topnav">
     <div class="container">
       <ul>
-        <template v-if="true">
-          <li><a href="javascript:;"><i class="iconfont icon-user"></i>周杰伦</a></li>
+        <template v-if="store.userInfo.token">
+          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ store.userInfo.nickname }}</a></li>
           <li>
             <el-popconfirm title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
               <template #reference>
-                <a href="javascript:;">退出登录</a>
+                <!-- 退出清空token -->
+                <a href="javascript:;" @click="store.clearUserInfo" >退出登录</a>
               </template>
             </el-popconfirm>
           </li>

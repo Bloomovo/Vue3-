@@ -11,9 +11,14 @@ export const useUserStore = defineStore('user', () => {
     // pinia储存个人信息
     userInfo.value = res.data.result
   }
+  // 退出时清除用户信息
+  const clearUserInfo = () => {
+    userInfo.value = {}
+  }
   return {
     userInfo,
-    getLogin
+    getLogin,
+    clearUserInfo
   }
 }, {
   persist: true

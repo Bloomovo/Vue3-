@@ -30,7 +30,7 @@ const title = computed(() => HOTTYPE[props.hotType])
     <h3> {{title}} </h3>
     <!-- 商品区块 -->
     <RouterLink :to="`/detail/${item.id}`" class="goods-item" v-for="item in store.detailHotList" :key="item.id">
-      <img :src="item.picture" alt="" />
+      <img v-img-lazy="item.picture" alt="" />
       <p class="name ellipsis">{{ item.name }}</p>
       <p class="desc ellipsis">{{ item.desc }}</p>
       <p class="price">&yen;{{ item.price }}</p>

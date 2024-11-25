@@ -120,7 +120,7 @@ const skuChange = (sku) => {
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in store.detailList.details.pictures" :src="img" :key="img" alt="">
+                  <img v-for="img in store.detailList.details.pictures" v-img-lazy="img" :key="img" alt="">
                 </div>
               </div>
             </div>
