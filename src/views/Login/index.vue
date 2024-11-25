@@ -1,10 +1,17 @@
 <script setup>
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+const store = useUserStore()
+const router = useRouter()
 const form = ref({
   account: '',
   password: '',
   agree: false
 })
+const formRef = ref(null)
 const rules = {
   account: [
     { required: true, message: '用户名不能为空', trigger: 'blur' }
@@ -17,10 +24,24 @@ const rules = {
   agree: [
     {
       validator: (rule, val, callback) => {
-        return val ? callback() : callback(new Error())
+        return val ? callback() : ElMessage({ type: 'error', message: '请勾选同意'})
       }
     }
   ]
+}
+// 点击登录校验·
+const login = () => {
+  formRef.value.validate( valid => {
+    if (valid) {
+      // 以valid做为判断条件 如果通过校验才执行登录逻辑
+      const { account, password } = form.value
+      store.getLogin({ account, password })
+      // 1. 提示用户
+      ElMessage({ type: 'success', message: '登录成功' })
+      // 2. 跳转首页
+      router.replace({ path: '/' })
+    }
+  })
 }
 </script>
 
@@ -46,7 +67,7 @@ const rules = {
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form :model="form" :rules="rules" label-position="right" label-width="60px"
+            <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
               status-icon>
               <el-form-item  prop="account" label="账户">
                 <el-input v-model="form.account"></el-input>
@@ -59,7 +80,7 @@ const rules = {
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="login" >点击登录</el-button>
             </el-form>
           </div>
         </div>
