@@ -7,8 +7,8 @@ import { getGoodsAPI } from "@/api/cart"
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref([])
   const getLogin = async (user) => {
-    user.account = 'xiaotuxian001',
-    user.password = '123456'
+    user.account = 'heima293',
+    user.password = 'hm#qd@23!'
     const res = await getLoginAPI(user)
     // pinia储存个人信息
     userInfo.value = res.data.result
