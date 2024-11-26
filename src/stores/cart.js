@@ -34,6 +34,7 @@ export const useCartStore = defineStore('cart', () => {
   const delCart = (id) => {
     cartList.value = cartList.value.filter(item => item.skuId !== id)
   }
+  // 购物车列表
   // 单选功能
   const singleCheck = (id, flag) => {
     const good = cartList.value.find(item => item.skuId === id)
@@ -45,6 +46,10 @@ export const useCartStore = defineStore('cart', () => {
   const allCheck = (flag) => {
     cartList.value.forEach(item => item.selected = flag)
   }
+  // 已选数量
+  const selectedCount = computed(() => cartList.value.filter(item => item.selected).reduce((sum, item)=> sum += item.count, 0))
+  // 已选总价
+  const selectedTotal = computed(() => cartList.value.filter(item => item.selected).reduce((sum, item)=> sum += item.count * item.price, 0))
   return {
     cartList,
     addCartList,
@@ -53,7 +58,9 @@ export const useCartStore = defineStore('cart', () => {
     delCart,
     singleCheck,
     isAll,
-    allCheck
+    allCheck,
+    selectedCount,
+    selectedTotal
   }
 }, {
   persist: true
