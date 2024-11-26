@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 // ElMessage
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
@@ -18,8 +18,29 @@ export const useCartStore = defineStore('cart', () => {
       ElMessage({ type: 'success', message: `${goods.name}现已加入购物车`})
     }
   }
+  // 商品总数量
+  const allCount = computed(() => {
+    return cartList.value.reduce((sum, item) => {
+      return sum += item.count
+    }, 0)
+  })
+  // 商品总价
+  const total = computed(() => {
+    return cartList.value.reduce((sum, item) => {
+      return sum += item.count * item.price
+    }, 0)
+  })
+  // 商品删除
+  const delCart = (id) => {
+    cartList.value = cartList.value.filter(item => item.skuId !== id)
+  }
   return {
     cartList,
-    addCartList
+    addCartList,
+    allCount,
+    total,
+    delCart
   }
+}, {
+  persist: true
 })

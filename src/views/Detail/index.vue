@@ -32,6 +32,7 @@ const goshopping = () => {
       id: store.detailList.id,
       name: store.detailList.name,
       picture: store.detailList.mainPictures[0],
+      price: store.detailList.price,
       count: count.value,
       skuId: skuInfo.value.skuId,
       attrsText: skuInfo.value.specsText,
