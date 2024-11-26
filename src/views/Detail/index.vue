@@ -1,10 +1,16 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router'
 import { useDetailStore } from '@/stores/detail'
 import DetailHot from './components/DetailHot.vue';
 import ImgView from '@/components/ImgView.vue';
 import XtxSku from '@/components/XtxSku.vue';
+// ElMessage
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+// 调用cartStore
+import { useCartStore } from '@/stores/cart'
+const cartStore = useCartStore()
 const store = useDetailStore()
 const route = useRoute()
 onMounted(() => {
@@ -12,8 +18,29 @@ onMounted(() => {
   store.getDetail(route.params.id)
 })
 // skuChange
+const skuInfo = ref({})
 const skuChange = (sku) => {
-  console.log(sku)
+  skuInfo.value = sku
+}
+// count
+const count = ref(1)
+
+// goshopping
+const goshopping = () => {
+  if (skuInfo.value?.skuId) {
+    cartStore.addCartList({
+      id: store.detailList.id,
+      name: store.detailList.name,
+      picture: store.detailList.mainPictures[0],
+      count: count.value,
+      skuId: skuInfo.value.skuId,
+      attrsText: skuInfo.value.specsText,
+      selected: true
+    })
+  } else {
+    // 没有选择规格
+    ElMessage({ type: 'error', message: '请选择规格'})
+  }
 }
 </script>
 
@@ -94,10 +121,10 @@ const skuChange = (sku) => {
               <!-- sku组件 -->
               <XtxSku :goods="store.detailList" @change="skuChange"></XtxSku>
               <!-- 数据组件 -->
-
+              <el-input-number v-model="count" :min="1" />
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
+                <el-button size="large" class="btn" @click="goshopping">
                   加入购物车
                 </el-button>
               </div>
