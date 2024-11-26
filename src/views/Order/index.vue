@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 import { useOrderStore } from '@/stores/order'
+import { useRouter } from 'vue-router'
 const orderStore = useOrderStore()
 onMounted(() => {
   orderStore.getCheckoutInfo( )
@@ -20,6 +21,7 @@ const confirm = () => {
 const esc = () => {
   isDialog.value = false
 }
+const router = useRouter()
 </script>
 
 <template>
@@ -114,7 +116,7 @@ const esc = () => {
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" >提交订单</el-button>
+          <el-button type="primary" size="large" @click="router.push('/pay')">提交订单</el-button>
         </div>
       </div>
     </div>
