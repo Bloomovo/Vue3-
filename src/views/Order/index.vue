@@ -13,6 +13,13 @@ const activeAddress = ref({})
 const switchAddress = (item) => {
   activeAddress.value = item
 }
+const confirm = () => {
+  orderStore.curAddress = activeAddress.value
+  isDialog.value = false
+}
+const esc = () => {
+  isDialog.value = false
+}
 </script>
 
 <template>
@@ -131,8 +138,8 @@ const switchAddress = (item) => {
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button>取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button @click="esc">取消</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
       </span>
     </template>
   </el-dialog>
