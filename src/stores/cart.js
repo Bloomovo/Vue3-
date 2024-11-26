@@ -34,12 +34,18 @@ export const useCartStore = defineStore('cart', () => {
   const delCart = (id) => {
     cartList.value = cartList.value.filter(item => item.skuId !== id)
   }
+  // 单选功能
+  const singleCheck = (id, flag) => {
+    const good = cartList.value.find(item => item.skuId === id)
+    good.selected = flag
+  }
   return {
     cartList,
     addCartList,
     allCount,
     total,
-    delCart
+    delCart,
+    singleCheck
   }
 }, {
   persist: true

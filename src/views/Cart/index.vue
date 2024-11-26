@@ -25,7 +25,7 @@ const cartStore = useCartStore()
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
                 <!-- 单选框 -->
-                <el-checkbox/>
+                <el-checkbox :model-value="i.selected" @change="(selected) => cartStore.singleCheck(i.skuId, selected)"/>
               </td>
               <td>
                 <div class="goods">
