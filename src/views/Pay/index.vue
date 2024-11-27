@@ -1,15 +1,35 @@
 <script setup>
 const payInfo = {}
 // 生成结算页面数据
-import { useOrderStore } from '@/stores/order';
-import { onMounted } from 'vue'
+import { useOrderStore } from '@/stores/order'
+import { usePayStore } from '@/stores/pay'
+import { onMounted, watch } from 'vue'
 const orderStore = useOrderStore()
-onMounted(() => {
-  // 将支付信息提交至api
-  // 获取详细账单结算
-  orderStore.getOrder(orderStore.orderPay.id)
-})
+const payStore = usePayStore()
 
+// 将支付信息提交至api
+// 获取详细账单结算
+// 
+watch(() => orderStore.orderPay, (newValue) => {
+  payStore.getOrder(newValue.id)
+})
+// 支付地址
+const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
+const backURL = 'http://127.0.0.1:5173/paycallback'
+const redirectUrl = encodeURIComponent(backURL)
+const payUrl = `${baseURL}pay/aliPay?orderId=${orderStore.orderPay.id}&redirect=${redirectUrl}`
+/**
+ * user: jfjbwb4477@sandbox.com
+ * password: 111111
+ * pay: 111111
+ */ 
+
+// 倒计时加载
+import { useCountDown } from '@/composables/useCountDown.js'
+const useCount = useCountDown()
+watch(() => payStore.payInfo, (newValue) => {
+  useCount.start(newValue.countdown)
+})
 </script>
 
 
@@ -21,7 +41,7 @@ onMounted(() => {
         <span class="icon iconfont icon-queren2"></span>
         <div class="tip">
           <p>订单提交成功！请尽快完成支付。</p>
-          <p>支付还剩 <span>24分30秒</span>, 超时后将取消订单</p>
+          <p>支付还剩 <span>{{ useCount.formatTime }}</span>, 超时后将取消订单</p>
         </div>
         <div class="amount">
           <span>应付总额：</span>

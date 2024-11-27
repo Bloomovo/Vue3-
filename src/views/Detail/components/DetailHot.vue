@@ -1,10 +1,12 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useDetailStore } from '@/stores/detail'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const store = useDetailStore()
-onMounted(() => {
+
+// 详情页主要内容加载后再加载hot
+watch(() => store.detailList, () => {
   store.getDetailHot({
     id: route.params.id,
     type: props.hotType
