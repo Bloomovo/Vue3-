@@ -4,8 +4,11 @@ import { ref } from "vue"
 import { defineStore } from "pinia"
 import { useCartStore } from "./cart"
 import { getGoodsAPI } from "@/api/cart"
+// 猜你喜欢接口导入
+import { getLikeListAPI } from "@/api/user"
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref([])
+  const likeList = ref([])
   const getLogin = async (user) => {
     user.account = 'heima293',
     user.password = 'hm#qd@23!'
@@ -24,10 +27,17 @@ export const useUserStore = defineStore('user', () => {
     const cartStore = useCartStore()
     cartStore.cartList = []
   }
+  // 猜你喜欢
+  const getLikeList = async () => {
+    const res = await getLikeListAPI({ limit: 4 })
+    likeList.value = res.data.result
+  }
   return {
     userInfo,
     getLogin,
-    clearUserInfo
+    clearUserInfo,
+    getLikeList,
+    likeList
   }
 }, {
   persist: true

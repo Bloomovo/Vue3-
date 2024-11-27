@@ -1,5 +1,12 @@
 <script setup>
-const userStore = {}
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
+import GoodsItem from '@/components/GoosItem.vue'
+const userStore = useUserStore()
+// 调用猜你喜欢接口
+onMounted(() => {
+  userStore.getLikeList()
+})
 </script>
 
 <template>
@@ -32,7 +39,8 @@ const userStore = {}
         <h4 data-v-bcb266e0="">猜你喜欢</h4>
       </div>
       <div class="goods-list">
-        <!-- <GoodsItem v-for="good in likeList" :key="good.id" :good="good" /> -->
+        <!-- 猜你喜欢数据渲染 -->
+        <GoodsItem v-for="good in userStore.likeList" :key="good.id" :goods="good" />
       </div>
     </div>
   </div>
