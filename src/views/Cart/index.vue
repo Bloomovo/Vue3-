@@ -1,8 +1,12 @@
 <script setup>
 import { useCartStore } from '@/stores/cart'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 const router = useRouter()
 const cartStore = useCartStore()
+onMounted(() => {
+  cartStore.getGoods()
+})
 </script>
 
 <template>

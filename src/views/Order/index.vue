@@ -3,9 +3,11 @@ import { ref } from 'vue'
 import { onMounted } from 'vue'
 import { useOrderStore } from '@/stores/order'
 import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cart'
+const cartStore = useCartStore()
 const orderStore = useOrderStore()
 onMounted(() => {
-  orderStore.getCheckoutInfo( )
+  orderStore.getCheckoutInfo()
 })
 // 控制切换地址弹窗
 const isDialog = ref(false)
@@ -22,6 +24,20 @@ const esc = () => {
   isDialog.value = false
 }
 const router = useRouter()
+// 提交订单
+const submitOrder = () => {
+  orderStore.createOrder({
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    goods: orderStore.orderList.goods.map(item => ({ skuId: item.skuId, count: item.count })),
+    addressId: orderStore.curAddress.id
+  })
+  // 更新购物车数据 删除购物车
+  cartStore.delCart(orderStore.orderList.goods.map(item => item.skuId))
+  router.replace('/pay')
+}
 </script>
 
 <template>
@@ -116,7 +132,7 @@ const router = useRouter()
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" @click="router.push('/pay')">提交订单</el-button>
+          <el-button type="primary" size="large" @click="submitOrder">提交订单</el-button>
         </div>
       </div>
     </div>

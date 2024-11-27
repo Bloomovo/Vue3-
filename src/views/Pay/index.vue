@@ -1,21 +1,15 @@
 <script setup>
 const payInfo = {}
 // 生成结算页面数据
-import { usePayStore } from '@/stores/pay'
-import { useOrderStore } from '@/stores/order'
+import { useOrderStore } from '@/stores/order';
 import { onMounted } from 'vue'
-const payStore = usePayStore()
 const orderStore = useOrderStore()
 onMounted(() => {
-  payStore.createOrder({
-    deliveryTimeType: 1,
-    payType: 1,
-    payChannel: 1,
-    buyerMessage: '',
-    goods: orderStore.orderList.goods.map(item => ({ skuId: item.skuId, count: item.count })),
-    addressId: orderStore.curAddress
-  })
+  // 将支付信息提交至api
+  // 获取详细账单结算
+  orderStore.getOrder(orderStore.orderPay.id)
 })
+
 </script>
 
 
@@ -31,7 +25,7 @@ onMounted(() => {
         </div>
         <div class="amount">
           <span>应付总额：</span>
-          <span>¥{{ payInfo.payMoney?.toFixed(2) }}</span>
+          <span>¥{{ orderStore.orderPay.payMoney?.toFixed(2) }}</span>
         </div>
       </div>
       <!-- 付款方式 -->

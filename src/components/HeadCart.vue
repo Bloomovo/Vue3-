@@ -1,8 +1,14 @@
 <script setup>
   import { useCartStore } from '@/stores/cart'
   import { useRouter } from 'vue-router'
+  import { onMounted } from 'vue';
   const cartStore = useCartStore()
   const router = useRouter()
+
+  onMounted(() => {
+    // 渲染购物车
+    cartStore.getGoods()
+  })
 </script>
 
 <template>

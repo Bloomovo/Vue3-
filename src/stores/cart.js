@@ -4,7 +4,7 @@ import { computed, ref } from "vue"
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 // 加入购物车和删除购物车接口
-import { insertCartAPI, delCartAPI, memberGoodAPI, memberGoodsAPI } from "@/api/cart"
+import { insertCartAPI, delCartAPI, memberGoodAPI, memberGoodsAPI, getGoodsAPI } from "@/api/cart"
 export const useCartStore = defineStore('cart', () => {
   const cartList = ref([])
   const addCartList = async (goods) => {
@@ -68,6 +68,11 @@ export const useCartStore = defineStore('cart', () => {
   const selectedCount = computed(() => cartList.value.filter(item => item.selected).reduce((sum, item)=> sum += item.count, 0))
   // 已选总价
   const selectedTotal = computed(() => cartList.value.filter(item => item.selected).reduce((sum, item)=> sum += item.count * item.price, 0))
+  // 获取最新购物车列表
+  const getGoods = async () => {
+    const res = await getGoodsAPI()
+    cartList.value = res.data.result
+  }
   return {
     cartList,
     addCartList,
@@ -78,7 +83,8 @@ export const useCartStore = defineStore('cart', () => {
     isAll,
     allCheck,
     selectedCount,
-    selectedTotal
+    selectedTotal,
+    getGoods
   }
 }, {
   persist: true
