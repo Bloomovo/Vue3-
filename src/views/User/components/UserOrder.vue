@@ -1,4 +1,7 @@
 <script setup>
+import { onMounted, ref } from 'vue'
+import { useOrderStore } from '@/stores/order'
+const orderStore = useOrderStore()
 // tab列表
 const tabTypes = [
   { name: "all", label: "全部订单" },
@@ -9,24 +12,41 @@ const tabTypes = [
   { name: "complete", label: "已完成" },
   { name: "cancel", label: "已取消" }
 ]
+const params = ref({
+  orderState: 0,
+  page: 1,
+  pageSize: 2
+})
+// 切换tab
+const tabChange = (type) => {
+  params.value.orderState = type
+  orderStore.getUserOrder(params.value)
+}
 // 订单列表
-const orderList = []
+onMounted(() => {
+  orderStore.getUserOrder(params.value)
+})
 
+// 页数切换
+const pageChange = (page) => {
+  params.value.page = page
+  orderStore.getUserOrder(params.value)
+}
 </script>
 
 <template>
   <div class="order-container">
-    <el-tabs>
+    <el-tabs @tab-change="tabChange">
       <!-- tab切换 -->
       <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
       <div class="main-container">
-        <div class="holder-container" v-if="orderList.length === 0">
+        <div class="holder-container" v-if="orderStore.MyOrderList.length === 0">
           <el-empty description="暂无订单数据" />
         </div>
         <div v-else>
           <!-- 订单列表 -->
-          <div class="order-item" v-for="order in orderList" :key="order.id">
+          <div class="order-item" v-for="order in orderStore.MyOrderList" :key="order.id">
             <div class="head">
               <span>下单时间：{{ order.createTime }}</span>
               <span>订单编号：{{ order.id }}</span>
@@ -101,6 +121,14 @@ const orderList = []
 
     </el-tabs>
   </div>
+  <el-pagination
+      v-model:current-page="params.page"
+      :disabled="disabled"
+      :background="background"
+      layout="total, prev, pager, next"
+      :total="orderStore.total"
+      @current-change="pageChange"
+    />
 
 </template>
 

@@ -7,7 +7,7 @@ import router from '@/router' // 使用已创建的路由实例
 // axios 实例
 const request = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
-  timeout: 5000
+  timeout: 8000
 })
 // 添加请求拦截器
 request.interceptors.request.use(function (config) {
