@@ -21,22 +21,28 @@ const params = ref({
 const tabChange = (type) => {
   params.value.orderState = type
   orderStore.getUserOrder(params.value)
+  orderStore.loading = true
 }
 // 订单列表
 onMounted(() => {
   orderStore.getUserOrder(params.value)
+  orderStore.loading = true
 })
 
 // 页数切换
 const pageChange = (page) => {
   params.value.page = page
   orderStore.getUserOrder(params.value)
+  orderStore.loading = true
 }
 </script>
 
 <template>
   <div class="order-container">
-    <el-tabs @tab-change="tabChange">
+    <el-tabs 
+      @tab-change="tabChange"
+      v-loading="orderStore.isLoading"
+    >
       <!-- tab切换 -->
       <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
@@ -123,8 +129,6 @@ const pageChange = (page) => {
   </div>
   <el-pagination
       v-model:current-page="params.page"
-      :disabled="disabled"
-      :background="background"
       layout="total, prev, pager, next"
       :total="orderStore.total"
       @current-change="pageChange"

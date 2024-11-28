@@ -1,7 +1,7 @@
 <script setup>
+import { getDetailAPI } from '@/api/detail'
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router'
-import { useDetailStore } from '@/stores/detail'
 import DetailHot from './components/DetailHot.vue';
 import ImgView from '@/components/ImgView.vue';
 import XtxSku from '@/components/XtxSku.vue';
@@ -11,12 +11,22 @@ import 'element-plus/theme-chalk/el-message.css'
 // 调用cartStore
 import { useCartStore } from '@/stores/cart'
 const cartStore = useCartStore()
-const store = useDetailStore()
 const route = useRoute()
+// 详情页加载函数
+const detailList = ref([])
+const getDetail = async (id) => {
+  const res = await getDetailAPI(id)
+  detailList.value = res.data.result
+  // 取消加载
+  loading.value = false
+}
+// loading
+const loading = ref(true)
 onMounted(() => {
   // 调用详情页api
-  store.getDetail(route.params.id)
+  getDetail(route.params.id)
 })
+
 // skuChange
 const skuInfo = ref({})
 const skuChange = (sku) => {
@@ -29,10 +39,10 @@ const count = ref(1)
 const goshopping = () => {
   if (skuInfo.value?.skuId) {
     cartStore.addCartList({
-      id: store.detailList.id,
-      name: store.detailList.name,
-      picture: store.detailList.mainPictures[0],
-      price: store.detailList.price,
+      id: detailList.value.id,
+      name: detailList.value.name,
+      picture: detailList.value.mainPictures[0],
+      price: detailList.value.price,
       count: count.value,
       skuId: skuInfo.value.skuId,
       attrsText: skuInfo.value.specsText,
@@ -47,120 +57,125 @@ const goshopping = () => {
 
 <template>
   <div class="xtx-goods-page">
-    <div class="container" v-if="store.detailList.details">
-      <div class="bread-container">
-        <el-breadcrumb separator=">">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <!-- 
-            错误原因：goods一开始{}  {}.categories -> undefined  -> undefined[1]
-            1. 可选链的语法?. 
-            2. v-if手动控制渲染时机 保证只有数据存在才渲染
-           -->
-          <el-breadcrumb-item :to="{ path: `/category/${store.detailList.categories[1].id}` }">{{ store.detailList.categories[1].name }}
-          </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/subCategory/${store.detailList.categories[0].id}` }">{{
-            store.detailList.categories[0].name
-          }}
-          </el-breadcrumb-item>
-          <el-breadcrumb-item>{{store.detailList.name}}</el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
-      <!-- 商品信息 -->
-      <div class="info-container">
-        <div>
-          <div class="goods-info">
-            <div class="media">
-              <!-- 图片预览区 -->
-              <ImgView :pictures="store.detailList.mainPictures"></ImgView>
-              <!-- 统计数量 -->
-              <ul class="goods-sales">
-                <li>
-                  <p>销量人气</p>
-                  <p> {{ store.detailList.salesCount }}+ </p>
-                  <p><i class="iconfont icon-task-filling"></i>销量人气</p>
-                </li>
-                <li>
-                  <p>商品评价</p>
-                  <p>{{ store.detailList.commentCount }}+</p>
-                  <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
-                </li>
-                <li>
-                  <p>收藏人气</p>
-                  <p>{{ store.detailList.collectCount }}+</p>
-                  <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
-                </li>
-                <li>
-                  <p>品牌信息</p>
-                  <p>{{ store.detailList.brand.name }}</p>
-                  <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
-                </li>
-              </ul>
-            </div>
-            <div class="spec">
-              <!-- 商品信息区 -->
-              <p class="g-name"> {{ store.detailList.name }} </p>
-              <p class="g-desc">{{ store.detailList.desc }} </p>
-              <p class="g-price">
-                <span>{{ store.detailList.oldPrice }}</span>
-                <span> {{ store.detailList.price }}</span>
-              </p>
-              <div class="g-service">
-                <dl>
-                  <dt>促销</dt>
-                  <dd>12月好物放送，App领券购买直降120元</dd>
-                </dl>
-                <dl>
-                  <dt>服务</dt>
-                  <dd>
-                    <span>无忧退货</span>
-                    <span>快速退款</span>
-                    <span>免费包邮</span>
-                    <a href="javascript:;">了解详情</a>
-                  </dd>
-                </dl>
+    <el-container 
+    v-loading="loading"
+    element-loading-text="Loading..."
+    >
+      <div class="container" v-if="detailList.details">
+        <div class="bread-container">
+          <el-breadcrumb separator=">">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <!-- 
+              错误原因：goods一开始{}  {}.categories -> undefined  -> undefined[1]
+              1. 可选链的语法?. 
+              2. v-if手动控制渲染时机 保证只有数据存在才渲染
+            -->
+            <el-breadcrumb-item :to="{ path: `/category/${detailList.categories[1].id}` }">{{ detailList.categories[1].name }}
+            </el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: `/category/subCategory/${detailList.categories[0].id}` }">{{
+              detailList.categories[0].name
+            }}
+            </el-breadcrumb-item>
+            <el-breadcrumb-item>{{detailList.name}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+        <!-- 商品信息 -->
+        <div class="info-container">
+          <div>
+            <div class="goods-info">
+              <div class="media">
+                <!-- 图片预览区 -->
+                <ImgView :pictures="detailList.mainPictures"></ImgView>
+                <!-- 统计数量 -->
+                <ul class="goods-sales">
+                  <li>
+                    <p>销量人气</p>
+                    <p> {{ detailList.salesCount }}+ </p>
+                    <p><i class="iconfont icon-task-filling"></i>销量人气</p>
+                  </li>
+                  <li>
+                    <p>商品评价</p>
+                    <p>{{ detailList.commentCount }}+</p>
+                    <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
+                  </li>
+                  <li>
+                    <p>收藏人气</p>
+                    <p>{{ detailList.collectCount }}+</p>
+                    <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
+                  </li>
+                  <li>
+                    <p>品牌信息</p>
+                    <p>{{ detailList.brand.name }}</p>
+                    <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
+                  </li>
+                </ul>
               </div>
-              <!-- sku组件 -->
-              <XtxSku :goods="store.detailList" @change="skuChange"></XtxSku>
-              <!-- 数据组件 -->
-              <el-input-number v-model="count" :min="1" />
-              <!-- 按钮组件 -->
-              <div>
-                <el-button size="large" class="btn" @click="goshopping">
-                  加入购物车
-                </el-button>
-              </div>
+              <div class="spec">
+                <!-- 商品信息区 -->
+                <p class="g-name"> {{ detailList.name }} </p>
+                <p class="g-desc">{{ detailList.desc }} </p>
+                <p class="g-price">
+                  <span>{{ detailList.oldPrice }}</span>
+                  <span> {{ detailList.price }}</span>
+                </p>
+                <div class="g-service">
+                  <dl>
+                    <dt>促销</dt>
+                    <dd>12月好物放送，App领券购买直降120元</dd>
+                  </dl>
+                  <dl>
+                    <dt>服务</dt>
+                    <dd>
+                      <span>无忧退货</span>
+                      <span>快速退款</span>
+                      <span>免费包邮</span>
+                      <a href="javascript:;">了解详情</a>
+                    </dd>
+                  </dl>
+                </div>
+                <!-- sku组件 -->
+                <XtxSku :goods="detailList" @change="skuChange"></XtxSku>
+                <!-- 数据组件 -->
+                <el-input-number v-model="count" :min="1" />
+                <!-- 按钮组件 -->
+                <div>
+                  <el-button size="large" class="btn" @click="goshopping">
+                    加入购物车
+                  </el-button>
+                </div>
 
+              </div>
             </div>
-          </div>
-          <div class="goods-footer">
-            <div class="goods-article">
-              <!-- 商品详情 -->
-              <div class="goods-tabs">
-                <nav>
-                  <a>商品详情</a>
-                </nav>
-                <div class="goods-detail">
-                  <!-- 属性 -->
-                  <ul class="attrs">
-                    <li v-for="item in store.detailList.details.properties" :key="item.value">
-                      <span class="dt">{{ item.name }}</span>
-                      <span class="dd">{{ item.value }}</span>
-                    </li>
-                  </ul>
-                  <!-- 图片 -->
-                  <img v-for="img in store.detailList.details.pictures" v-img-lazy="img" :key="img" alt="">
+            <div class="goods-footer">
+              <div class="goods-article">
+                <!-- 商品详情 -->
+                <div class="goods-tabs">
+                  <nav>
+                    <a>商品详情</a>
+                  </nav>
+                  <div class="goods-detail">
+                    <!-- 属性 -->
+                    <ul class="attrs">
+                      <li v-for="item in detailList.details.properties" :key="item.value">
+                        <span class="dt">{{ item.name }}</span>
+                        <span class="dd">{{ item.value }}</span>
+                      </li>
+                    </ul>
+                    <!-- 图片 -->
+                    <img v-for="img in detailList.details.pictures" v-img-lazy="img" :key="img" alt="">
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- 24热榜+专题推荐 -->
-            <div class="goods-aside">
-              <DetailHot :hotType="1"></DetailHot>
-              <DetailHot :hotType="2"></DetailHot>
+              <!-- 24热榜+专题推荐 -->
+              <div class="goods-aside">
+                <DetailHot :hotType="1"></DetailHot>
+                <DetailHot :hotType="2"></DetailHot>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+  </el-container>
   </div>
 </template>
 

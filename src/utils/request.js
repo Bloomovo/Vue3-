@@ -3,11 +3,10 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/user'
-import router from '@/router' // 使用已创建的路由实例
 // axios 实例
 const request = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
-  timeout: 8000
+  timeout: 10000
 })
 // 添加请求拦截器
 request.interceptors.request.use(function (config) {

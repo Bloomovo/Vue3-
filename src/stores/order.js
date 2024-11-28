@@ -8,7 +8,7 @@ import { getUserOrdeAPI } from "@/api/order"
 export const useOrderStore = defineStore('order', () => {
   const orderList = ref([])
   const curAddress = ref(null)
-
+  
   const getCheckoutInfo = async () => {
     const res = await getCheckoutInfoAPI()
     orderList.value = res.data.result
@@ -26,12 +26,17 @@ export const useOrderStore = defineStore('order', () => {
   const MyOrderList = ref([])
   const total = ref(0)
 
+  // loading 加载
+  const loading = ref(true)
+  const isLoading = computed(() => loading.value ? true : false)
   // 我的订单
   const getUserOrder = async (params) => {
     const res = await getUserOrdeAPI(params)
     MyOrderList.value = res.data.result.items
     total.value = res.data.result.counts
+    loading.value = false
   }
+
   return {
     orderList,
     getCheckoutInfo,
@@ -40,6 +45,8 @@ export const useOrderStore = defineStore('order', () => {
     createOrder,
     getUserOrder,
     MyOrderList,
-    total
+    total,
+    loading,
+    isLoading
   }
 })

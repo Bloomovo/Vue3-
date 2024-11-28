@@ -41,7 +41,11 @@ export const useCartStore = defineStore('cart', () => {
   })
   // 商品删除
   const delCart = async (id) => {
-    const ids = cartList.value.map(item => item.skuId === id)
+    const ids = cartList.value.map(item => {
+      if (item.skuId === id) {
+        return item.skuId
+      }
+    })
     cartList.value = cartList.value.filter(item => item.skuId !== id)
     // 将本地购物车数据，更新到接口数据
     await delCartAPI(ids)
@@ -53,7 +57,7 @@ export const useCartStore = defineStore('cart', () => {
     good.selected = flag
     // 修改商品选中状态
     const { skuId, count, selected } = good
-    await memberGoodAPI({skuId, count, flag })
+    await memberGoodAPI({skuId, count, selected })
   }
   // 全选按钮状态
   const isAll = computed(() => cartList.value.every(item => item.selected))

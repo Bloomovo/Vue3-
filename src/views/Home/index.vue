@@ -4,7 +4,7 @@ import HomeCateGory from '@/views/Home/components/HomeCateGory.vue'
 import HomeHot from '@/views/Home/components/HomeHot.vue'
 import HomeNew from '@/views/Home/components/HomeNew.vue'
 import HomeProduct from '@/views/Home/components/HomeProduct.vue'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useBannerStore } from '@/stores/banner.js'
 import { useNewGoodsStore } from '@/stores/newGoods'
 import { useHomeHotStore } from '@/stores/homeHot'
@@ -13,20 +13,26 @@ const bannerStore = useBannerStore()
 const newGoodsStore = useNewGoodsStore()
 const homeHotStore = useHomeHotStore()
 const goodsProduct = useProductStore()
+const loading = ref(true)
 onMounted(() => {
   bannerStore.getBanner()
   newGoodsStore.getNewGoods()
   homeHotStore.getHot()
   goodsProduct.getGoods()
+  loading.value = false
 })
 </script>
 
 <template>
-  <div class="container">
-    <HomeCateGory/>
-    <HomeBanner/>  
+  <div
+    v-loading="loading"
+  >
+    <div class="container">
+      <HomeCateGory/>
+      <HomeBanner/>  
+    </div>
+      <HomeNew/>
+      <HomeHot/>
+      <HomeProduct />
   </div>
-    <HomeNew/>
-    <HomeHot/>
-    <HomeProduct />
 </template>

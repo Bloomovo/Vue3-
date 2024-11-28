@@ -1,13 +1,17 @@
 <script setup>
-import { computed, onMounted, watch } from 'vue'
-import { useDetailStore } from '@/stores/detail'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { fetchHotGoodsAPI } from '@/api/detail' 
 const route = useRoute()
-const store = useDetailStore()
-
+const detailHotList = ref([])
+// hot
+const getDetailHot = async (obj) => {
+  const res = await fetchHotGoodsAPI(obj)
+  detailHotList.value = res.data.result
+}
 // 详情页主要内容加载后再加载hot
-watch(() => store.detailList, () => {
-  store.getDetailHot({
+onMounted(() => {
+  getDetailHot({
     id: route.params.id,
     type: props.hotType
   })
@@ -31,7 +35,7 @@ const title = computed(() => HOTTYPE[props.hotType])
   <div class="goods-hot">
     <h3> {{title}} </h3>
     <!-- 商品区块 -->
-    <RouterLink :to="`/detail/${item.id}`" class="goods-item" v-for="item in store.detailHotList" :key="item.id">
+    <RouterLink :to="`/detail/${item.id}`" class="goods-item" v-for="item in detailHotList" :key="item.id">
       <img v-img-lazy="item.picture" alt="" />
       <p class="name ellipsis">{{ item.name }}</p>
       <p class="desc ellipsis">{{ item.desc }}</p>

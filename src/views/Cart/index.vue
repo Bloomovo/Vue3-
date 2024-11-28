@@ -2,11 +2,20 @@
 import { useCartStore } from '@/stores/cart'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+import { memberGoodAPI } from '@/api/cart'
 const router = useRouter()
 const cartStore = useCartStore()
 onMounted(() => {
   cartStore.getGoods()
 })
+// 下单前确认商品数量
+const pushOrder = () => {
+  router.push('/order')
+}
+// 商品数量改变，更新数据
+const memberGood = async (count, skuId, selected) => {
+  await memberGoodAPI({ skuId, count, selected })
+} 
 </script>
 
 <template>
@@ -48,7 +57,7 @@ onMounted(() => {
                 <p>&yen;{{ i.price }}</p>
               </td>
               <td class="tc">
-                <el-input-number v-model="i.count" />
+                <el-input-number v-model="i.count" :min="1" @change="memberGood(i.count, i.skuId, i.selected)"/>
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
@@ -83,7 +92,7 @@ onMounted(() => {
           <span class="red">¥ {{ cartStore.selectedTotal.toFixed(2) }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" @click="router.push('/order')">下单结算</el-button>
+          <el-button size="large" type="primary" @click="pushOrder">下单结算</el-button>
         </div>
       </div>
     </div>

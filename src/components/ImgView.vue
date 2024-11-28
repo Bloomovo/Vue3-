@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useMouseInElement } from '@vueuse/core'
 const target = ref(null)
 const { elementX, elementY, isOutside } = useMouseInElement(target)
@@ -9,7 +9,6 @@ const top = ref(0)
 
 const positionX = ref(0)
 const positionY = ref(0)
-
 const props = defineProps({
   pictures: {
     type: Array
@@ -22,14 +21,7 @@ const imageList = ref([
 // 实现鼠标单击交互
 const curIndex = ref(0)
 const mouseEnterFn = (i) => curIndex.value = i
-// 监听 props.pictures 的变化
-watch(
-  () => props.pictures,
-  (newPictures) => {
-    imageList.value = newPictures
-  },
-  { immediate: true } // 立即执行以初始化 imageList
-)
+
 watch([elementX, elementY, isOutside], () => {
     // 如果鼠标没有移入到盒子里面 直接不执行后面的逻辑
     if(isOutside.value) return
